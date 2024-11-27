@@ -21,58 +21,58 @@ if uploaded_file:
         # Filtrer les données pour la France
         data_france = data
         
-            max_significance = data_france['significance'].max()
-            min_significance = data_france['significance'].min()
+    max_significance = data_france['significance'].max()
+    min_significance = data_france['significance'].min()
 
-            st.write(f"Significance maximale : {max_significance}")
-            st.write(f"Significance minimale : {min_significance}")
+    st.write(f"Significance maximale : {max_significance}")
+    st.write(f"Significance minimale : {min_significance}")
 
-            # Créer une carte centrée sur la France
-            france_map = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+    # Créer une carte centrée sur la France
+    france_map = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
 
-            # Filtrer selon la colonne 'significance'
-            low_significance = data_france[data_france['significance'] < 50]
-            medium_significance = data_france[(data_france['significance'] >= 50) & (data_france['significance'] < 150)]
-            high_significance = data_france[data_france['significance'] >= 150]
+    # Filtrer selon la colonne 'significance'
+    low_significance = data_france[data_france['significance'] < 50]
+    medium_significance = data_france[(data_france['significance'] >= 50) & (data_france['significance'] < 150)]
+    high_significance = data_france[data_france['significance'] >= 150]
 
-            # Ajouter les couches pour chaque catégorie
-            low_layer = folium.FeatureGroup(name="Significance < 50").add_to(france_map)
-            for _, row in low_significance.iterrows():
-                folium.CircleMarker(
-                    location=[row['latitude'], row['longitude']],
-                    radius=2,
-                    color='green',
-                    fill=True,
-                    fill_color='green',
-                    fill_opacity=0.6
-                ).add_to(low_layer)
+    # Ajouter les couches pour chaque catégorie
+    low_layer = folium.FeatureGroup(name="Significance < 50").add_to(france_map)
+    for _, row in low_significance.iterrows():
+        folium.CircleMarker(
+            location=[row['latitude'], row['longitude']],
+            radius=2,
+            color='green',
+            fill=True,
+            fill_color='green',
+            fill_opacity=0.6
+        ).add_to(low_layer)
 
-            medium_layer = folium.FeatureGroup(name="Significance 50-150").add_to(france_map)
-            for _, row in medium_significance.iterrows():
-                folium.CircleMarker(
-                    location=[row['latitude'], row['longitude']],
-                    radius=5,
-                    color='orange',
-                    fill=True,
-                    fill_color='orange',
-                    fill_opacity=0.6
-                ).add_to(medium_layer)
+    medium_layer = folium.FeatureGroup(name="Significance 50-150").add_to(france_map)
+    for _, row in medium_significance.iterrows():
+        folium.CircleMarker(
+            location=[row['latitude'], row['longitude']],
+            radius=5,
+            color='orange',
+            fill=True,
+            fill_color='orange',
+            fill_opacity=0.6
+        ).add_to(medium_layer)
 
-            high_layer = folium.FeatureGroup(name="Significance >= 150").add_to(france_map)
-            for _, row in high_significance.iterrows():
-                folium.CircleMarker(
-                    location=[row['latitude'], row['longitude']],
-                    radius=8,
-                    color='red',
-                    fill=True,
-                    fill_color='red',
-                    fill_opacity=0.6
-                ).add_to(high_layer)
+    high_layer = folium.FeatureGroup(name="Significance >= 150").add_to(france_map)
+    for _, row in high_significance.iterrows():
+        folium.CircleMarker(
+            location=[row['latitude'], row['longitude']],
+            radius=8,
+            color='red',
+            fill=True,
+            fill_color='red',
+            fill_opacity=0.6
+        ).add_to(high_layer)
 
-            folium.LayerControl().add_to(france_map)
+    folium.LayerControl().add_to(france_map)
 
-            # Afficher la carte avec Streamlit
-            st.subheader("Carte des séismes en France :")
-            folium_static(france_map)
-    except Exception as e:
-        st.error(f"Erreur lors de la lecture du fichier : {e}")
+    # Afficher la carte avec Streamlit
+    st.subheader("Carte des séismes en France :")
+    folium_static(france_map)
+except Exception as e:
+    st.error(f"Erreur lors de la lecture du fichier : {e}")
