@@ -77,6 +77,6 @@ if uploaded_file:
 
             # Afficher la carte avec Streamlit
             st.subheader("Carte des séismes en France :")
-            folium_static(france_map)
+            folium (france_map)
     except Exception as e:
         st.error(f"Erreur lors de la lecture du fichier : {e}")
