@@ -5,7 +5,7 @@ import pandas as pd
 st.title("Incorporer et Visualiser un Document Excel")
 
 # Étape 1 : Téléchargement du fichier Excel
-uploaded_file = st.file_uploader("Téléchargez un fichier Excel ici :", type=["xlsx", "xls"])
+uploaded_file = st.file_uploader("Téléchargez un fichier Excel ici :", type=["xlsx", "xls", "scv"])
 
 if uploaded_file:
     # Étape 2 : Lecture du fichier Excel
