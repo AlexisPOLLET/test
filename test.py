@@ -20,7 +20,8 @@ if uploaded_file:
         
        # Étape 3 : Vérifications et calculs
         st.subheader("Statistiques des séismes en France")
-        if data.empty:
+        data_frrance = data
+        if data_france.empty:
             st.warning("Aucune donnée trouvée pour la France.")
         else:
             max_significance = data_france['significance'].max()
