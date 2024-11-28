@@ -1,7 +1,11 @@
 import streamlit as st
 import pandas as pd
 from streamlit_folium import folium_static
-import folium
+try:
+    import folium
+    from streamlit_folium import folium_static
+except ImportError:
+    st.error("Les bibliothèques nécessaires ne sont pas correctement installées. Vérifiez le fichier requirements.txt.")
 
 # Titre de l'application
 st.title("Analyse des Séismes en France")
