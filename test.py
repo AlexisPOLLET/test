@@ -3,7 +3,7 @@ import streamlit as st
 import plotly.express as px
 
 # Titre de l'application
-st.title("Analyse des Séismes en France")
+st.title("Analyse des Séismes en France entre 1990 et 2023")
 
 # Étape 1 : Téléchargement du fichier CSV
 uploaded_file = st.file_uploader("Téléchargez un fichier CSV contenant les données des séismes", type=["csv"])
