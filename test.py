@@ -18,6 +18,10 @@ if uploaded_file:
         st.subheader("Aperçu des données :")
         st.write(data.head())
         
+        # Statistiques descriptives
+        st.subheader("Statistiques descriptives des données :")
+        st.write(data.describe())
+        
        # Étape 3 : Vérifications et calculs
         st.subheader("Statistiques des séismes en France")
         # data_france = data[data['state'] == 'France']
