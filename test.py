@@ -20,7 +20,7 @@ if uploaded_file:
         
        # Étape 3 : Vérifications et calculs
         st.subheader("Statistiques des séismes en France")
-        data_frrance = data
+        data_france = data
         if data_france.empty:
             st.warning("Aucune donnée trouvée pour la France.")
         else:
