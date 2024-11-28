@@ -3,3 +3,7 @@ scikit-learn
 streamlit
 folium
 st_folium
+
+git add requirements.txt
+git commit -m "Ajout des dépendances dans requirements.txt"
+git push origin main
