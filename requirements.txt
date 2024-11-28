@@ -3,3 +3,5 @@ streamlit
 scikit-learn
 streamlit
 folium
+streamlit_folium
+folium_static
