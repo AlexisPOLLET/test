@@ -1,10 +1,6 @@
 import pandas as pd
 import streamlit as st
-import folium
 import plotly.express as px
-
-from streamlit_folium import folium_static
-
 
 # Titre de l'application
 st.title("Analyse des Séismes en France")
@@ -13,7 +9,7 @@ st.title("Analyse des Séismes en France")
 uploaded_file = st.file_uploader("Téléchargez un fichier CSV contenant les données des séismes", type=["csv"])
 
 if uploaded_file:
-    # Étape 2 : Lecture du fichier CSV
+    # Lecture du fichier CSV
     try:
         data = pd.read_csv(uploaded_file)
         st.success("Fichier chargé avec succès !")
@@ -21,86 +17,36 @@ if uploaded_file:
         # Aperçu des données
         st.subheader("Aperçu des données :")
         st.write(data.head())
-        
-        # Statistiques descriptives
-        st.subheader("Statistiques descriptives des données :")
-        st.write(data.describe())
-        
-        # Étape 3 : Filtrer les données pour la France
-        st.subheader("Statistiques des séismes en France")
-        data_france = data  # Utilisez un filtre si nécessaire pour votre dataset
-        
-        if data_france.empty:
-            st.warning("Aucune donnée trouvée pour la France.")
-        else:
-            # Calculer la significance max et min
-            max_significance = data_france['significance'].max()
-            min_significance = data_france['significance'].min()
-            st.write(f"Significance maximale : {max_significance}")
-            st.write(f"Significance minimale : {min_significance}")
 
-            # Créer une carte centrée sur la France
-            france_map = folium.Map(location=[46.603354, 1.888334], zoom_start=6)
+        # Vérification des colonnes nécessaires
+        if 'latitude' in data.columns and 'longitude' in data.columns and 'significance' in data.columns:
+            # Étape 2 : Filtrer les séismes par niveau de significance
+            st.subheader("Analyse des Séismes par Niveau de Significance")
 
-            # Ajouter des marqueurs selon la colonne 'significance'
-            low_significance = data_france[data_france['significance'] < 50]
-            medium_significance = data_france[(data_france['significance'] >= 50) & (data_france['significance'] < 150)]
-            high_significance = data_france[data_france['significance'] >= 150]
+            low_significance = data[data['significance'] < 50]
+            medium_significance = data[(data['significance'] >= 50) & (data['significance'] < 150)]
+            high_significance = data[data['significance'] >= 150]
 
-            # Ajouter les couches
-            for _, row in low_significance.iterrows():
-                folium.CircleMarker(
-                    location=[row['latitude'], row['longitude']],
-                    radius=2,
-                    color='green',
-                    fill=True,
-                    fill_color='green',
-                    fill_opacity=0.6
-                ).add_to(france_map)
+            st.write(f"Nombre de séismes de faible significance : {len(low_significance)}")
+            st.write(f"Nombre de séismes de moyenne significance : {len(medium_significance)}")
+            st.write(f"Nombre de séismes de forte significance : {len(high_significance)}")
 
-            for _, row in medium_significance.iterrows():
-                folium.CircleMarker(
-                    location=[row['latitude'], row['longitude']],
-                    radius=5,
-                    color='orange',
-                    fill=True,
-                    fill_color='orange',
-                    fill_opacity=0.6
-                ).add_to(france_map)
-
-            for _, row in high_significance.iterrows():
-                folium.CircleMarker(
-                    location=[row['latitude'], row['longitude']],
-                    radius=8,
-                    color='red',
-                    fill=True,
-                    fill_color='red',
-                    fill_opacity=0.6
-                ).add_to(france_map)
-
-            # Ajouter un contrôle des couches
-            folium.LayerControl().add_to(france_map)
-
-            # Afficher la carte dans Streamlit
-            st.subheader("Carte des séismes en France :")
-            folium_static(france_map)
-
-            # Étape 4 : Frise chronologique des séismes
-            st.subheader("Frise chronologique des séismes")
-            data_france['date'] = pd.to_datetime(data_france['date'], infer_datetime_format=True, errors='coerce')
-            data_france['year'] = data_france['date'].dt.year
-            seismes_par_annee = data_france.groupby('year').size().reset_index(name='nombre_seismes')
-
-            # Créer et afficher la frise chronologique avec Plotly
-            fig = px.bar(
-                seismes_par_annee, 
-                x='year', 
-                y='nombre_seismes', 
-                title='Nombre de Séismes par Année en France',
-                labels={'year': 'Année', 'nombre_seismes': 'Nombre de Séismes'},
-                template='plotly_dark'
+            # Étape 3 : Créer une carte interactive avec Plotly
+            st.subheader("Carte Interactive des Séismes")
+            fig_map = px.scatter_mapbox(
+                data,
+                lat="latitude",
+                lon="longitude",
+                color="significance",  # Couleur selon la significance
+                size="significance",  # Taille des points selon la significance
+                hover_name="significance",
+                title="Carte des Séismes en France",
+                zoom=5,
+                mapbox_style="carto-positron"
             )
-            st.plotly_chart(fig)
-
+            st.plotly_chart(fig_map)
+        else:
+            st.error("Les colonnes nécessaires 'latitude', 'longitude' et 'significance' sont absentes du fichier.")
     except Exception as e:
         st.error(f"Erreur lors de la lecture du fichier : {e}")
+
