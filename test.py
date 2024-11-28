@@ -1,8 +1,10 @@
-import streamlit as st
 import pandas as pd
+import streamlit as st
 import folium
-from streamlit_folium import folium_static
 import plotly.express as px
+
+from streamlit_folium import folium_static
+
 
 # Titre de l'application
 st.title("Analyse des Séismes en France")
