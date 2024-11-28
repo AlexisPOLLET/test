@@ -1,7 +1,8 @@
+import folium
 import streamlit as st
 import pandas as pd
-import folium
-from streamlit_folium import folium_static
+
+from streamlit_folium import st_folium
     
 # Titre de l'application
 st.title("Analyse des Séismes en France")
